@@ -13,12 +13,12 @@ import org.springframework.stereotype.Component;
 public class BootStrapData implements CommandLineRunner {
 
     private final AuthorRepository authorRepository;
-    private final BookRespository bookRespository;
+    private final BookRespository bookRepository;
     private final PublisherRepository publisherRepository;
 
     public BootStrapData(AuthorRepository authorRepository, BookRespository bookRespository, PublisherRepository publisherRespository) {
         this.authorRepository = authorRepository;
-        this.bookRespository = bookRespository;
+        this.bookRepository = bookRespository;
         this.publisherRepository = publisherRespository;
     }
 
@@ -40,18 +40,27 @@ public class BootStrapData implements CommandLineRunner {
         alex.getBooks().add(ddd);
         ddd.getAuthors().add(alex);
 
+        ddd.setPublisher(publisher);
+        publisher.getBooks().add(ddd);
+
         authorRepository.save(alex);
-        bookRespository.save(ddd);
+        bookRepository.save(ddd);
+        publisherRepository.save(publisher);
 
         Author rod = new Author("Rod", "Johnson");
         Book noEJB = new Book("J2EE Development without EJB","1231564561");
         rod.getBooks().add(noEJB);
         noEJB.getAuthors().add(rod);
 
-        authorRepository.save(rod);
-        bookRespository.save(noEJB);
+        noEJB.setPublisher(publisher);
+        publisher.getBooks().add(noEJB);
 
-        System.out.println("Number of books: " + bookRespository.count());
+        authorRepository.save(rod);
+        bookRepository.save(noEJB);
+        publisherRepository.save(publisher);
+
+        System.out.println("Number of books: " + bookRepository.count());
         System.out.println("Number of Authors: " + authorRepository.count());
+        System.out.println("Publisher Number of Books: " + publisher.getBooks().size());
     }
 }
